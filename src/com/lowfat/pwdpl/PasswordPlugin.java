@@ -1,6 +1,9 @@
 package com.lowfat.pwdpl;
 
+import java.util.stream.Collectors;
+
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.conversations.ConversationFactory;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
@@ -20,6 +23,7 @@ public class PasswordPlugin extends JavaPlugin {
         FACTORY = new ConversationFactory(INSTANCE);
         PluginManager pm = Bukkit.getPluginManager();
         pm.registerEvents(new Events(), INSTANCE);
+        Bukkit.getConsoleSender().sendMessage(Bukkit.getWhitelistedPlayers().stream().map(OfflinePlayer::toString).collect(Collectors.joining(",")));
     }
 
     @Override

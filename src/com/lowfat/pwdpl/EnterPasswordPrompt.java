@@ -1,5 +1,6 @@
 package com.lowfat.pwdpl;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.conversations.Conversable;
@@ -13,7 +14,7 @@ public class EnterPasswordPrompt implements Prompt {
 
     @Override
     public @NotNull String getPromptText(@NotNull ConversationContext context) {
-        return ChatColor.RED + "Enter the server password to play!";
+        return ChatColor.RED + "Say the server password to play!";
     }
 
     @Override
@@ -29,13 +30,23 @@ public class EnterPasswordPrompt implements Prompt {
             return null;
         }
         Player player = (Player) conversable;
-        if (input.equals(PasswordPlugin.SERVER_PASSWORD)) {
-            Events.unauthorized.remove(player.getUniqueId());
-            player.setGameMode(GameMode.SURVIVAL);
-            player.sendTitle(ChatColor.GREEN + "AUTHORIZED", "thank you!");
+        Bukkit.getConsoleSender().sendMessage(player.toString() + ": wl: " + player.isWhitelisted());
+        if (player.isWhitelisted()) {
+            authorize_player(player);
             return null;
         }
-        player.sendTitle(ChatColor.RED + "INCORRECT", "please enter the correct password!");
+        if (input.equals(PasswordPlugin.SERVER_PASSWORD)) {
+            player.setWhitelisted(true);
+            authorize_player(player);
+            return null;
+        }
+        player.sendTitle(ChatColor.RED + "INCORRECT", "please enter the correct password!", 10, 70, 20);
         return new EnterPasswordPrompt();
+    }
+
+    private @Nullable void authorize_player(@NotNull Player player) {
+        Events.unauthorized.remove(player.getUniqueId());
+        player.setGameMode(GameMode.SURVIVAL);
+        player.sendTitle(ChatColor.GREEN + "AUTHORIZED", "thank you!", 10, 70, 20);
     }
 }
