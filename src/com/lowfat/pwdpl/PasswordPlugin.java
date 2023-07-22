@@ -23,7 +23,7 @@ public class PasswordPlugin extends JavaPlugin {
         FACTORY = new ConversationFactory(INSTANCE);
         PluginManager pm = Bukkit.getPluginManager();
         pm.registerEvents(new Events(), INSTANCE);
-        Bukkit.getConsoleSender().sendMessage(Bukkit.getWhitelistedPlayers().stream().map(OfflinePlayer::toString).collect(Collectors.joining(",")));
+        Bukkit.getConsoleSender().sendMessage(Bukkit.getWhitelistedPlayers().stream().map(OfflinePlayer::getName).collect(Collectors.joining(",")));
     }
 
     @Override
